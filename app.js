@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   initClockAndDate();
   calculateSunAndMoon();
+  calculateLunarCalendar();
   fetchDailyQuote();
   fetchInfobaeNews();
 });
@@ -32,14 +33,11 @@ function initClockAndDate() {
   setInterval(update, 1000);
 }
 
-// 2. Cálculo Aproximado de Efemérides Astronómicas para San Juan (-31.53° S, -68.53° W)
+// 2. Cálculo Astronómico Diario para San Juan (-31.53° S, -68.53° W)
 function calculateSunAndMoon() {
   const now = new Date();
+  const month = now.getMonth();
   
-  // Horarios astronómicos aproximados para latitud San Juan
-  const month = now.getMonth(); // 0 - 11
-  
-  // Estimación de salida y puesta del Sol según época del año en San Juan
   let sunriseHours = 7.5 - Math.cos((month / 11) * Math.PI) * 0.8;
   let sunsetHours = 19.5 + Math.cos((month / 11) * Math.PI) * 0.8;
   
@@ -47,14 +45,8 @@ function calculateSunAndMoon() {
   document.getElementById("astro-sunrise").textContent = formatHour(sunriseHours);
   document.getElementById("astro-sunset").textContent = formatHour(sunsetHours);
 
-  // Fase Lunar aproximada
-  const year = now.getFullYear();
-  const day = now.getDate();
-  const m = now.getMonth() + 1;
-  const c = Math.floor(3.65 * year);
-  const e = Math.floor(30.6 * m);
-  const jd = c + e + day - 694039.09; // Días desde época
-  const phase = (jd / 29.5305882) % 1;
+  // Fase Lunar y Porcentaje de Iluminación
+  const phase = getMoonPhaseFraction(now);
 
   let moonPhaseText = "🌑 Nueva";
   if (phase > 0.03 && phase <= 0.22) moonPhaseText = "🌒 Creciente";
@@ -65,12 +57,14 @@ function calculateSunAndMoon() {
   else if (phase > 0.72 && phase <= 0.78) moonPhaseText = "🌗 Cuarto Menguante";
   else if (phase > 0.78 && phase <= 0.97) moonPhaseText = "🌘 Menguante";
 
-  document.getElementById("astro-moon-phase").textContent = moonPhaseText;
+  const illum = Math.round((1 - Math.cos(phase * 2 * Math.PI)) / 2 * 100);
 
-  // Visibilidad de constelaciones y planetas según temporada en el Sur (San Juan)
+  document.getElementById("astro-moon-phase").textContent = moonPhaseText;
+  document.getElementById("astro-moon-illum").textContent = `${illum}%`;
+
   let skyDesc = "";
   if (month >= 11 || month <= 2) {
-    skyDesc = "✨ **Destacan:** Orión (Las Tres Marías), Tauro, Las Pléyades. **Visibles:** Júpiter y Sirio al zénit.";
+    skyDesc = "✨ **Destacan:** Orión (Las Tres Marías), Tauro, Las Pléyades. **Visibles:** Júpiter y Sirio.";
   } else if (month >= 3 && month <= 5) {
     skyDesc = "✨ **Destacan:** La Cruz del Sur alta, Centauro, Leo. **Visibles:** Marte al anochecer.";
   } else if (month >= 6 && month <= 8) {
@@ -82,13 +76,55 @@ function calculateSunAndMoon() {
   document.getElementById("astro-constellations").innerHTML = skyDesc;
 }
 
+// 3. Calendario de Cambios de Fase Lunar del Mes
+function calculateLunarCalendar() {
+  const container = document.getElementById("lunar-calendar");
+  const now = new Date();
+  const currentMonth = now.getMonth();
+  const currentYear = now.getFullYear();
+
+  let phasesFound = [];
+  
+  // Recorremos los 30 días del mes evaluando la fase
+  for (let day = 1; day <= 30; day++) {
+    let testDate = new Date(currentYear, currentMonth, day);
+    let frac = getMoonPhaseFraction(testDate);
+
+    if (Math.abs(frac - 0.0) < 0.02 || Math.abs(frac - 1.0) < 0.02) {
+      phasesFound.push(`🌑 <strong>Luna Nueva:</strong> ${day}/${currentMonth+1}`);
+    } else if (Math.abs(frac - 0.25) < 0.02) {
+      phasesFound.push(`🌓 <strong>Cuarto Creciente:</strong> ${day}/${currentMonth+1}`);
+    } else if (Math.abs(frac - 0.50) < 0.02) {
+      phasesFound.push(`🌕 <strong>Luna Llena:</strong> ${day}/${currentMonth+1}`);
+    } else if (Math.abs(frac - 0.75) < 0.02) {
+      phasesFound.push(`🌗 <strong>Cuarto Menguante:</strong> ${day}/${currentMonth+1}`);
+    }
+  }
+
+  if (phasesFound.length > 0) {
+    container.innerHTML = phasesFound.map(item => `<div style="margin-bottom:3px;">&bull; ${item}</div>`).join('');
+  } else {
+    container.innerHTML = `<p style="margin:0; color:#555;">Consultando efemérides del ciclo actual...</p>`;
+  }
+}
+
+function getMoonPhaseFraction(dateObj) {
+  const year = dateObj.getFullYear();
+  const day = dateObj.getDate();
+  const m = dateObj.getMonth() + 1;
+  const c = Math.floor(3.65 * year);
+  const e = Math.floor(30.6 * m);
+  const jd = c + e + day - 694039.09;
+  return (jd / 29.5305882) % 1;
+}
+
 function formatHour(decimalHours) {
   const hrs = Math.floor(decimalHours);
   const mins = Math.round((decimalHours - hrs) * 60);
   return `${hrs < 10 ? '0' : ''}${hrs}:${mins < 10 ? '0' : ''}${mins} hs`;
 }
 
-// 3. Noticias de Infobae
+// 4. Noticias de Infobae
 async function fetchInfobaeNews() {
   const container = document.getElementById("news-container");
   const rssUrl = "https://www.infobae.com/arc/outboundfeeds/rss/";
@@ -112,7 +148,7 @@ async function fetchInfobaeNews() {
   }
 }
 
-// 4. Frase / Sentencia
+// 5. Frase / Sentencia
 async function fetchDailyQuote() {
   const quoteEl = document.getElementById("quote");
   const authorEl = document.getElementById("quote-author");
