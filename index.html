@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>El Portal del Reino - San Juan & Ciberespacio</title>
+  
+
+  <style>
+    /* Estética Mozárabe / Mediterránea / Andina (Alto Contraste) */
+    body {
+      background-color: #2b1d0c; /* Terracota oscuro / Tierra andina */
+      background-image: radial-gradient(#4a3219 1px, transparent 0);
+      background-size: 16px 16px;
+      font-family: "Georgia", "Times New Roman", serif;
+      margin: 0;
+      padding: 15px;
+      color: #1a1a1a;
+    }
+
+    /* Contenedor Principal con Bordes Ornamentales */
+    .realm-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      background-color: #fcf8f2; /* Pergamino claro */
+      border: 4px solid #8b5a2b;
+      outline: 2px solid #d4af37; /* Marco Dorado */
+      box-shadow: 0 0 20px rgba(0,0,0,0.8);
+      padding: 18px;
+    }
+
+    /* Encabezado Mozárabe */
+    header {
+      background: linear-gradient(135deg, #800020 0%, #4a000e 100%); /* Rojo Borgoña Sacro */
+      color: #f2d680; /* Dorado */
+      padding: 15px 20px;
+      margin-bottom: 15px;
+      border: 3px double #d4af37;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 24px;
+      font-family: "Georgia", serif;
+      letter-spacing: 1.5px;
+      text-shadow: 2px 2px #000;
+    }
+
+    .header-info {
+      text-align: right;
+    }
+
+    #clock {
+      font-size: 22px;
+      font-weight: bold;
+      color: #ffffff;
+      font-family: "Courier New", Courier, monospace;
+    }
+
+    /* Barra de Estado Sacra */
+    .status-bar {
+      background-color: #e8d8b8;
+      border: 2px solid #8b5a2b;
+      padding: 8px 12px;
+      font-weight: bold;
+      color: #4a000e;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+
+    /* Estructura de Columnas */
+    .main-grid {
+      display: table;
+      width: 100%;
+      table-layout: fixed;
+    }
+
+    .column-left {
+      display: table-cell;
+      width: 35%;
+      vertical-align: top;
+      padding-right: 15px;
+    }
+
+    .column-right {
+      display: table-cell;
+      width: 65%;
+      vertical-align: top;
+    }
+
+    /* Cajas con estilo Arco y Azulejo */
+    .box {
+      border: 2px solid #8b5a2b;
+      background-color: #ffffff;
+      margin-bottom: 18px;
+      box-shadow: 3px 3px 6px rgba(0,0,0,0.15);
+    }
+
+    .box-header {
+      font-weight: bold;
+      font-size: 13px;
+      padding: 6px 10px;
+      color: #ffffff;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-bottom: 2px solid #d4af37;
+    }
+
+    .bg-burgundy { background-color: #800020; } /* Sacro / Iglesia */
+    .bg-mediterranean { background-color: #004080; } /* Azul Mediterráneo */
+    .bg-olive { background-color: #3b5323; } /* Verde Olivo / Campo */
+    .bg-gold { background-color: #8b5a2b; } /* Tierra / Ocre */
+
+    .box-body {
+      padding: 12px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    /* Estilos de Enlaces */
+    ul.classic-links {
+      list-style-type: square;
+      padding-left: 20px;
+      margin: 0;
+    }
+
+    ul.classic-links li { margin-bottom: 6px; }
+
+    a {
+      color: #003399;
+      text-decoration: underline;
+      font-weight: bold;
+    }
+
+    a:visited { color: #551a8b; }
+    a:hover { color: #800020; background-color: #ffe680; }
+
+    .news-item {
+      background-color: #fbf9f5;
+      border: 1px solid #d3c4b1;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+    /* Tablas de Efemérides Astronómicas */
+    .astro-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      margin-top: 5px;
+    }
+
+    .astro-table td {
+      padding: 4px;
+      border-bottom: 1px dotted #8b5a2b;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 15px;
+      padding: 10px;
+      background-color: #e8d8b8;
+      border: 2px solid #8b5a2b;
+      font-size: 12px;
+      font-weight: bold;
+      color: #4a000e;
+    }
+
+    @media (max-width: 768px) {
+      .column-left, .column-right { display: block; width: 100%; padding-right: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="realm-container">
+
+    <!-- Encabezado Mozárabe -->
+    <header>
+      <div>
+        <h1>✠ REGNUM VICTORIALIS DE SAN JUAN DE LA FRONTERA ✠</h1>
+        <div style="font-size: 12px; color: #f2d680; margin-top: 3px;">
+          Umbral Virtual &bull; San Juan de la Frontera &bull; Los Andes
+        </div>
+      </div>
+      <div class="header-info">
+        <div id="clock">00:00:00</div>
+        <div id="date-display" style="font-size: 12px; font-weight: bold;">Cargando fecha...</div>
+      </div>
+    </header>
+
+    <!-- Barra de Estado -->
+    <div class="status-bar" id="greeting-bar">
+      Pax vobiscum. Bienvenido al umbral del Reino.
+    </div>
+
+    <!-- Grilla Principal -->
+    <div class="main-grid">
+
+      <!-- COLUMNA IZQUIERDA -->
+      <div class="column-left">
+
+        <!-- ASTRONOMÍA / CIELO DE SAN JUAN -->
+        <div class="box">
+          <div class="box-header bg-burgundy">🌌 El Cielo sobre San Juan (31.5°S)</div>
+          <div class="box-body">
+            <table class="astro-table">
+              <tr><td><strong>🌅 Alba Náutica:</strong></td><td id="astro-dawn">--:--</td></tr>
+              <tr><td><strong>☀️ Salida del Sol:</strong></td><td id="astro-sunrise">--:--</td></tr>
+              <tr><td><strong>🌇 Ocaso Solar:</strong></td><td id="astro-sunset">--:--</td></tr>
+              <tr><td><strong>🌙 Fase Lunar:</strong></td><td id="astro-moon-phase">Cargando...</td></tr>
+            </table>
+            <hr style="border: 0; border-top: 1px solid #8b5a2b; margin: 8px 0;">
+            <div style="font-size: 11px;">
+              <strong>🔭 Firmamento Andino de Hoy:</strong>
+              <div id="astro-constellations" style="margin-top:4px; color:#4a000e;">Cargando constelaciones...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CLIMA YR.NO (Inglés) -->
+        <div class="box">
+          <div class="box-header bg-olive">🌤️ Weather - Yr.no (San Juan)</div>
+          <div class="box-body">
+            <iframe src="https://www.yr.no/en/content/2-3837213/card.html?mode=dark" width="100%" height="150" frameborder="0" style="border:1px solid #8b5a2b;"></iframe>
+            <p style="font-size:11px; margin: 6px 0 0 0; text-align:right;">
+              👉 <a href="https://www.yr.no/en/forecast/daily-table/2-3837213/Argentina/San%20Juan/Capital/San%20Juan" target="_blank">Yr.no Detailed Forecast</a>
+            </p>
+          </div>
+        </div>
+
+        <!-- ACCESOS HABITUALES -->
+        <div class="box">
+          <div class="box-header bg-gold">📌 Enclaves & Accesos</div>
+          <div class="box-body">
+            <ul class="classic-links">
+              <li><a href="https://www.diariodecuyo.com.ar" target="_blank">Diario de Cuyo (San Juan)</a></li>
+              <li><a href="https://www.infobae.com" target="_blank">Infobae Argentina</a></li>
+              <li><a href="https://www.vatican.va/content/vatican/es.html" target="_blank">Santa Sede (Vaticano)</a></li>
+              <li><a href="https://www.yr.no/en" target="_blank">Yr.no Weather</a></li>
+              <li><a href="https://mail.google.com" target="_blank">Correo Gmail</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- PENSAMIENTO DEL DÍA -->
+        <div class="box">
+          <div class="box-header bg-burgundy">📜 Sentencia del Día</div>
+          <div class="box-body">
+            <blockquote id="quote" style="margin:0; font-style:italic; font-weight:bold; color:#4a000e;">
+              "Cargando pensamiento..."
+            </blockquote>
+            <div id="quote-author" style="text-align:right; font-size:11px; margin-top:5px; font-weight:bold;"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- COLUMNA DERECHA -->
+      <div class="column-right">
+
+        <!-- NOTICIAS DE INFOBAE -->
+        <div class="box">
+          <div class="box-header bg-mediterranean">📰 Noticias del Mundo & Marca Hispanohablante</div>
+          <div class="box-body">
+            <p style="margin-top:0; font-size:12px; font-weight:bold; color:#004080;">Titulares de Infobae en Vivo:</p>
+            <div id="news-container">
+              <p style="font-weight:bold;">Cargando últimas noticias...</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <footer>
+      ✠ Ex Caelo ad Terram ✠ San Juan, Argentina &bull; Reino del Ciberespacio
+    </footer>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
