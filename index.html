@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Regnum Victorialis de San Juan de la Frontera</title>
-
+  <title>El Portal del Reino - San Juan & Ciberespacio</title>
+  
   <style>
     /* Estética Mozárabe / Mediterránea / Andina (Alto Contraste) */
     body {
-      background-color: #2b1d0c;
+      background-color: #2b1d0c; /* Terracota oscuro / Tierra andina */
       background-image: radial-gradient(#4a3219 1px, transparent 0);
       background-size: 16px 16px;
       font-family: "Georgia", "Times New Roman", serif;
@@ -17,21 +17,21 @@
       color: #1a1a1a;
     }
 
-    /* Contenedor Principal */
+    /* Contenedor Principal con Bordes Ornamentales */
     .realm-container {
       max-width: 1100px;
       margin: 0 auto;
-      background-color: #fcf8f2;
+      background-color: #fcf8f2; /* Pergamino claro */
       border: 4px solid #8b5a2b;
-      outline: 2px solid #d4af37;
+      outline: 2px solid #d4af37; /* Marco Dorado */
       box-shadow: 0 0 20px rgba(0,0,0,0.8);
       padding: 18px;
     }
 
-    /* Encabezado */
+    /* Encabezado Mozárabe */
     header {
-      background: linear-gradient(135deg, #800020 0%, #4a000e 100%);
-      color: #f2d680;
+      background: linear-gradient(135deg, #800020 0%, #4a000e 100%); /* Rojo Borgoña Sacro */
+      color: #f2d680; /* Dorado */
       padding: 15px 20px;
       margin-bottom: 15px;
       border: 3px double #d4af37;
@@ -43,13 +43,31 @@
 
     header h1 {
       margin: 0;
-      font-size: 22px;
+      font-size: 24px;
       font-family: "Georgia", serif;
-      letter-spacing: 1px;
+      letter-spacing: 1.5px;
       text-shadow: 2px 2px #000;
     }
 
-    .header-info { text-align: right; }
+    .header-info {
+      text-align: right;
+    }
+
+    .contact-header {
+      font-size: 12px;
+      color: #f2d680;
+      margin-top: 5px;
+    }
+
+    .contact-header a {
+      color: #ffffff;
+      text-decoration: none;
+    }
+
+    .contact-header a:hover {
+      text-decoration: underline;
+      background-color: transparent;
+    }
 
     #clock {
       font-size: 22px;
@@ -58,7 +76,7 @@
       font-family: "Courier New", Courier, monospace;
     }
 
-    /* Barra de Estado */
+    /* Barra de Estado Sacra */
     .status-bar {
       background-color: #e8d8b8;
       border: 2px solid #8b5a2b;
@@ -69,7 +87,7 @@
       font-size: 14px;
     }
 
-    /* Grilla Principal */
+    /* Estructura de Columnas */
     .main-grid {
       display: table;
       width: 100%;
@@ -89,7 +107,7 @@
       vertical-align: top;
     }
 
-    /* Cajas estilo Marco */
+    /* Cajas con estilo Arco y Azulejo */
     .box {
       border: 2px solid #8b5a2b;
       background-color: #ffffff;
@@ -107,10 +125,10 @@
       border-bottom: 2px solid #d4af37;
     }
 
-    .bg-burgundy { background-color: #800020; }
-    .bg-mediterranean { background-color: #004080; }
-    .bg-olive { background-color: #3b5323; }
-    .bg-gold { background-color: #8b5a2b; }
+    .bg-burgundy { background-color: #800020; } /* Sacro / Iglesia */
+    .bg-mediterranean { background-color: #004080; } /* Azul Mediterráneo */
+    .bg-olive { background-color: #3b5323; } /* Verde Olivo / Campo */
+    .bg-gold { background-color: #8b5a2b; } /* Tierra / Ocre */
 
     .box-body {
       padding: 12px;
@@ -118,28 +136,7 @@
       line-height: 1.5;
     }
 
-    /* Retrato Real */
-    .king-portrait {
-      width: 100%;
-      height: auto;
-      border: 3px solid #d4af37;
-      box-shadow: 0 0 8px rgba(0,0,0,0.4);
-      display: block;
-    }
-
-    /* Tablas de Información */
-    .astro-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 12px;
-      margin-top: 5px;
-    }
-
-    .astro-table td {
-      padding: 4px;
-      border-bottom: 1px dotted #8b5a2b;
-    }
-
+    /* Estilos de Enlaces */
     ul.classic-links {
       list-style-type: square;
       padding-left: 20px;
@@ -162,6 +159,65 @@
       border: 1px solid #d3c4b1;
       padding: 10px;
       margin-bottom: 10px;
+    }
+
+    /* Tablas y Formularios */
+    .astro-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      margin-top: 5px;
+    }
+
+    .astro-table td {
+      padding: 4px;
+      border-bottom: 1px dotted #8b5a2b;
+    }
+
+    .guestbook-form label {
+      display: block;
+      font-weight: bold;
+      margin-top: 8px;
+      margin-bottom: 2px;
+      color: #4a000e;
+      font-size: 12px;
+    }
+
+    .guestbook-form input[type="text"],
+    .guestbook-form input[type="email"],
+    .guestbook-form textarea {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 6px;
+      border: 1px solid #8b5a2b;
+      background-color: #fcf8f2;
+      font-family: inherit;
+      font-size: 12px;
+    }
+
+    .guestbook-form textarea {
+      resize: vertical;
+    }
+
+    .guestbook-btn {
+      margin-top: 10px;
+      background-color: #800020;
+      color: #f2d680;
+      border: 1px solid #d4af37;
+      padding: 8px 14px;
+      font-weight: bold;
+      cursor: pointer;
+      font-family: "Georgia", serif;
+      width: 100%;
+    }
+
+    .guestbook-btn:hover {
+      background-color: #4a000e;
+    }
+
+    .latin-term {
+      font-weight: bold;
+      color: #800020;
     }
 
     footer {
@@ -189,7 +245,11 @@
       <div>
         <h1>✠ REGNUM VICTORIALIS DE SAN JUAN DE LA FRONTERA ✠</h1>
         <div style="font-size: 12px; color: #f2d680; margin-top: 3px;">
-          Umbral Virtual &bull; San Juan &bull; Los Andes &bull; Mar del Sur
+          Umbral Virtual &bull; San Juan de la Frontera &bull; Los Andes
+        </div>
+        <div class="contact-header">
+          ✉️ <a href="mailto:arielgomezz@gmail.com">arielgomezz@gmail.com</a> | 
+          📱 <a href="https://wa.me/542645803330" target="_blank">+54 264 5803330</a>
         </div>
       </div>
       <div class="header-info">
@@ -209,32 +269,6 @@
       <!-- COLUMNA IZQUIERDA -->
       <div class="column-left">
 
-        <!-- RETRATO DEL REY -->
-        <div class="box">
-          <div class="box-header bg-gold">👑 El Soberano del Reino</div>
-          <div class="box-body" style="text-align: center;">
-            <img src="retrato-rey.jpg" alt="Retrato del Rey" class="king-portrait">
-            <p style="font-size: 11px; margin: 8px 0 0 0; font-weight: bold; color: #800020;">
-              Ariel I — Gobernante de las Islas & de los Andes
-            </p>
-          </div>
-        </div>
-
-        <!-- CALENDARIO LUNAR Y CICLOS -->
-        <div class="box">
-          <div class="box-header bg-burgundy">🌙 Calendario & Fases Lunares</div>
-          <div class="box-body">
-            <p style="margin-top:0; font-size:12px; font-weight:bold;">Estado Actual de la Luna:</p>
-            <table class="astro-table">
-              <tr><td><strong>Fase Hoy:</strong></td><td id="astro-moon-phase">Cargando...</td></tr>
-              <tr><td><strong>Visibilidad:</strong></td><td id="astro-moon-illum">--%</td></tr>
-            </table>
-            <hr style="border: 0; border-top: 1px solid #8b5a2b; margin: 8px 0;">
-            <p style="margin:4px 0; font-size:11px; font-weight:bold; color:#800020;">Próximos Cambios de Fase del Mes:</p>
-            <div id="lunar-calendar" style="font-size:11px;">Cargando fechas...</div>
-          </div>
-        </div>
-
         <!-- ASTRONOMÍA / CIELO DE SAN JUAN -->
         <div class="box">
           <div class="box-header bg-burgundy">🌌 El Cielo sobre San Juan (31.5°S)</div>
@@ -243,10 +277,11 @@
               <tr><td><strong>🌅 Alba Náutica:</strong></td><td id="astro-dawn">--:--</td></tr>
               <tr><td><strong>☀️ Salida del Sol:</strong></td><td id="astro-sunrise">--:--</td></tr>
               <tr><td><strong>🌇 Ocaso Solar:</strong></td><td id="astro-sunset">--:--</td></tr>
+              <tr><td><strong>🌙 Fase Lunar:</strong></td><td id="astro-moon-phase">Cargando...</td></tr>
             </table>
             <hr style="border: 0; border-top: 1px solid #8b5a2b; margin: 8px 0;">
             <div style="font-size: 11px;">
-              <strong>🔭 Firmamento Andino:</strong>
+              <strong>🔭 Firmamento Andino de Hoy:</strong>
               <div id="astro-constellations" style="margin-top:4px; color:#4a000e;">Cargando constelaciones...</div>
             </div>
           </div>
@@ -277,19 +312,19 @@
           </div>
         </div>
 
-      </div>
-
-      <!-- COLUMNA DERECHA -->
-      <div class="column-right">
-
-        <!-- NOTICIAS DE INFOBAE -->
+        <!-- GLOSARIO DE LATÍN -->
         <div class="box">
-          <div class="box-header bg-mediterranean">📰 Noticias del Mundo & Marca Hispanohablante</div>
-          <div class="box-body">
-            <p style="margin-top:0; font-size:12px; font-weight:bold; color:#004080;">Titulares de Infobae en Vivo:</p>
-            <div id="news-container">
-              <p style="font-weight:bold;">Cargando últimas noticias...</p>
-            </div>
+          <div class="box-header bg-gold">📚 Glossarium Sacrum (Glosario)</div>
+          <div class="box-body" style="font-size: 12px;">
+            <p style="margin-top: 0;">Explicación de las locuciones en latín presentes en este portal:</p>
+            <ul style="padding-left: 15px; margin: 0;">
+              <li><span class="latin-term">Regnum Victorialis:</span> "Reino Victorioso", alegoría del espacio o dominio personal de superación.</li>
+              <li><span class="latin-term">Pax vobiscum:</span> "La paz sea con vosotros", saludo tradicional litúrgico.</li>
+              <li><span class="latin-term">Ex Caelo ad Terram:</span> "Del cielo a la tierra", conexión entre lo trascendente y lo cotidiano.</li>
+              <li><span class="latin-term">Epi Stola Ex Corde:</span> "Carta desde el corazón", un mensaje auténtico y sincero enviado por los visitantes.</li>
+              <li><span class="latin-term">Quo Vadis?:</span> "¿A dónde vas?", interrogante existencial sobre el rumbo, el propósito y el legado personal.</li>
+              <li><span class="latin-term">Sola fides sufficit:</span> "Solo la fe basta", sentencia del himno <em>Pange Lingua</em> de San Tomás de Aquino.</li>
+            </ul>
           </div>
         </div>
 
@@ -306,10 +341,62 @@
 
       </div>
 
+      <!-- COLUMNA DERECHA -->
+      <div class="column-right">
+
+        <!-- NOTICIAS DE INFOBAE -->
+        <div class="box">
+          <div class="box-header bg-mediterranean">📰 Noticias del Mundo & Marca Hispanohablante</div>
+          <div class="box-body">
+            <p style="margin-top:0; font-size:12px; font-weight:bold; color:#004080;">Titulares de Infobae en Vivo:</p>
+            <div id="news-container">
+              <p style="font-weight:bold;">Cargando últimas noticias...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- LIBRO DE VISITAS: EPI STOLA EX CORDE -->
+        <div class="box">
+          <div class="box-header bg-burgundy">✉️ Epi Stola Ex Corde — Libro de Visitas</div>
+          <div class="box-body">
+            <p style="margin-top:0; font-size:12px;">
+              Bienvenido al pergamino de visitas. Te invito a dejar tu huella en este enclave virtual. Completa tus datos de contacto y comparte un mensaje sincere.
+            </p>
+            <form class="guestbook-form" id="guestbookForm" onsubmit="sendGuestMessage(event)">
+              <label for="gb-name">Nombre / Título:</label>
+              <input type="text" id="gb-name" required placeholder="Ej: Juan Pérez">
+
+              <label for="gb-email">Correo Electrónico (Mail):</label>
+              <input type="email" id="gb-email" required placeholder="ejemplo@correo.com">
+
+              <label for="gb-phone">WhatsApp / Teléfono:</label>
+              <input type="text" id="gb-phone" placeholder="+54 264 ...">
+
+              <label for="gb-message">Mensaje Ex Corde (Desde el corazón):</label>
+              <textarea id="gb-message" rows="3" required placeholder="Escribe tu mensaje aquí..."></textarea>
+
+              <!-- APARTADO QUO VADIS -->
+              <div style="background-color: #fbf9f5; border: 1px dashed #8b5a2b; padding: 10px; margin-top: 12px;">
+                <strong style="color: #800020; font-size: 13px;">❓ Apartado: Quo Vadis? (¿A dónde vas?)</strong>
+                <p style="font-size: 11px; margin: 4px 0 6px 0; color: #555;">
+                  ¿Cuál es tu reflexión sobre tu rumbo personal, tus metas o el legado que deseas dejar en este mundo?
+                </p>
+                <textarea id="gb-legacy" rows="2" placeholder="Tu reflexión sobre tu legado y camino..."></textarea>
+              </div>
+
+              <button type="submit" class="guestbook-btn">Enviar Epístola al Reino</button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+
     </div>
 
     <footer>
-      ✠ Regnum Victorialis de San Juan de la Frontera ✠ Ex Caelo ad Terram
+      ✠ Ex Caelo ad Terram ✠ San Juan, Argentina &bull; Reino del Ciberespacio<br>
+      Contacto directo: <a href="mailto:arielgomezz@gmail.com" style="color: #800020;">arielgomezz@gmail.com</a> | 
+      WhatsApp: <a href="https://wa.me/542645803330" target="_blank" style="color: #800020;">+54 264 5803330</a>
     </footer>
 
   </div>
