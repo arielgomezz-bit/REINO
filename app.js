@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   initClockAndDate();
   calculateSunAndMoon();
-  calculateLunarCalendar();
   fetchDailyQuote();
   fetchInfobaeNews();
 });
@@ -33,10 +32,11 @@ function initClockAndDate() {
   setInterval(update, 1000);
 }
 
-// 2. Cálculo Astronómico Diario para San Juan (-31.53° S, -68.53° W)
+// 2. Cálculo Aproximado de Efemérides Astronómicas para San Juan (-31.53° S, -68.53° W)
 function calculateSunAndMoon() {
   const now = new Date();
-  const month = now.getMonth();
+  
+  const month = now.getMonth(); // 0 - 11
   
   let sunriseHours = 7.5 - Math.cos((month / 11) * Math.PI) * 0.8;
   let sunsetHours = 19.5 + Math.cos((month / 11) * Math.PI) * 0.8;
@@ -45,8 +45,14 @@ function calculateSunAndMoon() {
   document.getElementById("astro-sunrise").textContent = formatHour(sunriseHours);
   document.getElementById("astro-sunset").textContent = formatHour(sunsetHours);
 
-  // Fase Lunar y Porcentaje de Iluminación
-  const phase = getMoonPhaseFraction(now);
+  // Fase Lunar
+  const year = now.getFullYear();
+  const day = now.getDate();
+  const m = now.getMonth() + 1;
+  const c = Math.floor(3.65 * year);
+  const e = Math.floor(30.6 * m);
+  const jd = c + e + day - 694039.09;
+  const phase = (jd / 29.5305882) % 1;
 
   let moonPhaseText = "🌑 Nueva";
   if (phase > 0.03 && phase <= 0.22) moonPhaseText = "🌒 Creciente";
@@ -57,65 +63,21 @@ function calculateSunAndMoon() {
   else if (phase > 0.72 && phase <= 0.78) moonPhaseText = "🌗 Cuarto Menguante";
   else if (phase > 0.78 && phase <= 0.97) moonPhaseText = "🌘 Menguante";
 
-  const illum = Math.round((1 - Math.cos(phase * 2 * Math.PI)) / 2 * 100);
-
   document.getElementById("astro-moon-phase").textContent = moonPhaseText;
-  document.getElementById("astro-moon-illum").textContent = `${illum}%`;
 
+  // Constelaciones visibles
   let skyDesc = "";
   if (month >= 11 || month <= 2) {
-    skyDesc = "✨ **Destacan:** Orión (Las Tres Marías), Tauro, Las Pléyades. **Visibles:** Júpiter y Sirio.";
+    skyDesc = "✨ <strong>Destacan:</strong> Orión (Las Tres Marías), Tauro, Las Pléyades. <strong>Visibles:</strong> Júpiter y Sirio al zénit.";
   } else if (month >= 3 && month <= 5) {
-    skyDesc = "✨ **Destacan:** La Cruz del Sur alta, Centauro, Leo. **Visibles:** Marte al anochecer.";
+    skyDesc = "✨ <strong>Destacan:</strong> La Cruz del Sur alta, Centauro, Leo. <strong>Visibles:</strong> Marte al anochecer.";
   } else if (month >= 6 && month <= 8) {
-    skyDesc = "✨ **Destacan:** Escorpio en lo alto, Sagitario, Centro Galáctico. **Visibles:** Saturno radiante.";
+    skyDesc = "✨ <strong>Destacan:</strong> Escorpio en lo alto, Sagitario, Centro Galáctico. <strong>Visibles:</strong> Saturno radiante.";
   } else {
-    skyDesc = "✨ **Destacan:** Pegaso, Acuario, La Cruz del Sur descendiendo. **Visibles:** Venus al crepúsculo.";
+    skyDesc = "✨ <strong>Destacan:</strong> Pegaso, Acuario, La Cruz del Sur descendiendo. <strong>Visibles:</strong> Venus al crepúsculo.";
   }
 
   document.getElementById("astro-constellations").innerHTML = skyDesc;
-}
-
-// 3. Calendario de Cambios de Fase Lunar del Mes
-function calculateLunarCalendar() {
-  const container = document.getElementById("lunar-calendar");
-  const now = new Date();
-  const currentMonth = now.getMonth();
-  const currentYear = now.getFullYear();
-
-  let phasesFound = [];
-  
-  // Recorremos los 30 días del mes evaluando la fase
-  for (let day = 1; day <= 30; day++) {
-    let testDate = new Date(currentYear, currentMonth, day);
-    let frac = getMoonPhaseFraction(testDate);
-
-    if (Math.abs(frac - 0.0) < 0.02 || Math.abs(frac - 1.0) < 0.02) {
-      phasesFound.push(`🌑 <strong>Luna Nueva:</strong> ${day}/${currentMonth+1}`);
-    } else if (Math.abs(frac - 0.25) < 0.02) {
-      phasesFound.push(`🌓 <strong>Cuarto Creciente:</strong> ${day}/${currentMonth+1}`);
-    } else if (Math.abs(frac - 0.50) < 0.02) {
-      phasesFound.push(`🌕 <strong>Luna Llena:</strong> ${day}/${currentMonth+1}`);
-    } else if (Math.abs(frac - 0.75) < 0.02) {
-      phasesFound.push(`🌗 <strong>Cuarto Menguante:</strong> ${day}/${currentMonth+1}`);
-    }
-  }
-
-  if (phasesFound.length > 0) {
-    container.innerHTML = phasesFound.map(item => `<div style="margin-bottom:3px;">&bull; ${item}</div>`).join('');
-  } else {
-    container.innerHTML = `<p style="margin:0; color:#555;">Consultando efemérides del ciclo actual...</p>`;
-  }
-}
-
-function getMoonPhaseFraction(dateObj) {
-  const year = dateObj.getFullYear();
-  const day = dateObj.getDate();
-  const m = dateObj.getMonth() + 1;
-  const c = Math.floor(3.65 * year);
-  const e = Math.floor(30.6 * m);
-  const jd = c + e + day - 694039.09;
-  return (jd / 29.5305882) % 1;
 }
 
 function formatHour(decimalHours) {
@@ -124,7 +86,7 @@ function formatHour(decimalHours) {
   return `${hrs < 10 ? '0' : ''}${hrs}:${mins < 10 ? '0' : ''}${mins} hs`;
 }
 
-// 4. Noticias de Infobae
+// 3. Noticias de Infobae
 async function fetchInfobaeNews() {
   const container = document.getElementById("news-container");
   const rssUrl = "https://www.infobae.com/arc/outboundfeeds/rss/";
@@ -148,18 +110,58 @@ async function fetchInfobaeNews() {
   }
 }
 
-// 5. Frase / Sentencia
+// 4. Frase / Sentencia del Día (Garantizada en Español)
 async function fetchDailyQuote() {
   const quoteEl = document.getElementById("quote");
   const authorEl = document.getElementById("quote-author");
 
+  // Colección de sentencias filosóficas y espirituales en español
+  const spanishQuotes = [
+    { quote: "No es que tengamos poco tiempo, sino que perdemos mucho.", author: "Séneca" },
+    { quote: "El sabio no dice todo lo que piensa, pero siempre piensa todo lo que dice.", author: "Aristóteles" },
+    { quote: "La fe es la sustancia de las cosas que se esperan, la demostración de las cosas que no se ven.", author: "San Pablo" },
+    { quote: "El valor de las cosas no está en el tiempo que duran, sino en la intensidad con que se viven.", author: "San Agustín" },
+    { quote: "Solo con el corazón se puede ver bien; lo esencial es invisible a los ojos.", author: "Antoine de Saint-Exupéry" },
+    { quote: "Caminante, no hay camino, se hace camino al andar.", author: "Antonio Machado" }
+  ];
+
   try {
-    const res = await fetch("https://dummyjson.com/quotes/random");
-    const data = await res.json();
-    quoteEl.textContent = `"${data.quote}"`;
-    authorEl.textContent = `— ${data.author}`;
+    // Selecciona una cita del repertorio según el día del año para que cambie a diario
+    const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
+    const selected = spanishQuotes[dayOfYear % spanishQuotes.length];
+    
+    quoteEl.textContent = `"${selected.quote}"`;
+    authorEl.textContent = `— ${selected.author}`;
   } catch (err) {
-    quoteEl.textContent = '"Sola fides sufficit."';
+    quoteEl.textContent = '"La fe por sí sola basta."';
     authorEl.textContent = '— Santo Tomás de Aquino';
+  }
+}
+
+// 5. Envío del Libro de Visitas (Epi Stola Ex Corde)
+function sendGuestMessage(event) {
+  event.preventDefault();
+
+  const name = document.getElementById("gb-name").value;
+  const email = document.getElementById("gb-email").value;
+  const phone = document.getElementById("gb-phone").value;
+  const message = document.getElementById("gb-message").value;
+  const legacy = document.getElementById("gb-legacy").value;
+
+  const subject = encodeURIComponent(`Epi Stola Ex Corde de ${name}`);
+  const bodyText = `Hola Ariel,\n\nHas recibido una nueva epístola desde el libro de visitas de tu sitio web:\n\n` +
+    `👤 Nombre: ${name}\n` +
+    `✉️ Email: ${email}\n` +
+    `📱 WhatsApp: ${phone || 'No especificado'}\n\n` +
+    `📜 Mensaje Ex Corde:\n${message}\n\n` +
+    `❓ Reflexión Quo Vadis? (Legado):\n${legacy || 'Sin mensaje de legado.'}\n`;
+
+  const mailtoUrl = `mailto:arielgomezz@gmail.com?subject=${subject}&body=${encodeURIComponent(bodyText)}`;
+
+  // Abrir cliente de correo
+  window.location.href = mailtoUrl;
+
+  alert("¡Gracias por tu mensaje! Se abrirá tu aplicación de correo para enviar la epístola.");
+} de Aquino';
   }
 }
