@@ -5,27 +5,33 @@ document.addEventListener("DOMContentLoaded", () => {
   fetchInfobaeNews();
 });
 
-// 1. Reloj y Saludo
+// 1. Reloj y Saludo Inmediatos
 function initClockAndDate() {
   const clockEl = document.getElementById("clock");
   const dateEl = document.getElementById("date-display");
   const greetingEl = document.getElementById("greeting-bar");
 
   function update() {
-    const now = new Date();
-    clockEl.textContent = now.toLocaleTimeString("es-AR");
+    try {
+      const now = new Date();
+      if (clockEl) clockEl.textContent = now.toLocaleTimeString("es-AR");
 
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    const dateStr = now.toLocaleDateString("es-AR", options);
-    dateEl.textContent = dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      const dateStr = now.toLocaleDateString("es-AR", options);
+      const formattedDate = dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
+      
+      if (dateEl) dateEl.textContent = formattedDate;
 
-    const hours = now.getHours();
-    let saludo = "Pax vobiscum";
-    if (hours >= 6 && hours < 12) saludo = "¡Buenos días en el Reino!";
-    else if (hours >= 12 && hours < 20) saludo = "¡Buenas tardes!";
-    else saludo = "¡Buenas noches bajo el firmamento!";
+      const hours = now.getHours();
+      let saludo = "Pax vobiscum";
+      if (hours >= 6 && hours < 12) saludo = "¡Buenos días en el Reino!";
+      else if (hours >= 12 && hours < 20) saludo = "¡Buenas tardes!";
+      else saludo = "¡Buenas noches bajo el firmamento!";
 
-    greetingEl.textContent = `${saludo} — Hoy es ${dateEl.textContent}.`;
+      if (greetingEl) greetingEl.textContent = `${saludo} — Hoy es ${formattedDate}.`;
+    } catch (e) {
+      console.error("Error al actualizar reloj:", e);
+    }
   }
 
   update();
@@ -34,50 +40,59 @@ function initClockAndDate() {
 
 // 2. Cálculo Aproximado de Efemérides Astronómicas para San Juan (-31.53° S, -68.53° W)
 function calculateSunAndMoon() {
-  const now = new Date();
-  
-  const month = now.getMonth(); // 0 - 11
-  
-  let sunriseHours = 7.5 - Math.cos((month / 11) * Math.PI) * 0.8;
-  let sunsetHours = 19.5 + Math.cos((month / 11) * Math.PI) * 0.8;
-  
-  document.getElementById("astro-dawn").textContent = formatHour(sunriseHours - 0.5);
-  document.getElementById("astro-sunrise").textContent = formatHour(sunriseHours);
-  document.getElementById("astro-sunset").textContent = formatHour(sunsetHours);
+  try {
+    const now = new Date();
+    const month = now.getMonth(); // 0 - 11
+    
+    let sunriseHours = 7.5 - Math.cos((month / 11) * Math.PI) * 0.8;
+    let sunsetHours = 19.5 + Math.cos((month / 11) * Math.PI) * 0.8;
+    
+    const dawnEl = document.getElementById("astro-dawn");
+    const sunriseEl = document.getElementById("astro-sunrise");
+    const sunsetEl = document.getElementById("astro-sunset");
+    const moonEl = document.getElementById("astro-moon-phase");
+    const constEl = document.getElementById("astro-constellations");
 
-  // Fase Lunar
-  const year = now.getFullYear();
-  const day = now.getDate();
-  const m = now.getMonth() + 1;
-  const c = Math.floor(3.65 * year);
-  const e = Math.floor(30.6 * m);
-  const jd = c + e + day - 694039.09;
-  const phase = (jd / 29.5305882) % 1;
+    if (dawnEl) dawnEl.textContent = formatHour(sunriseHours - 0.5);
+    if (sunriseEl) sunriseEl.textContent = formatHour(sunriseHours);
+    if (sunsetEl) sunsetEl.textContent = formatHour(sunsetHours);
 
-  let moonPhaseText = "🌑 Nueva";
-  if (phase > 0.03 && phase <= 0.22) moonPhaseText = "🌒 Creciente";
-  else if (phase > 0.22 && phase <= 0.28) moonPhaseText = "🌓 Cuarto Creciente";
-  else if (phase > 0.28 && phase <= 0.47) moonPhaseText = "🌔 Gibosa Creciente";
-  else if (phase > 0.47 && phase <= 0.53) moonPhaseText = "🌕 Llena";
-  else if (phase > 0.53 && phase <= 0.72) moonPhaseText = "🌖 Gibosa Menguante";
-  else if (phase > 0.72 && phase <= 0.78) moonPhaseText = "🌗 Cuarto Menguante";
-  else if (phase > 0.78 && phase <= 0.97) moonPhaseText = "🌘 Menguante";
+    // Fase Lunar
+    const year = now.getFullYear();
+    const day = now.getDate();
+    const m = month + 1;
+    const c = Math.floor(3.65 * year);
+    const e = Math.floor(30.6 * m);
+    const jd = c + e + day - 694039.09;
+    const phase = (jd / 29.5305882) % 1;
 
-  document.getElementById("astro-moon-phase").textContent = moonPhaseText;
+    let moonPhaseText = "🌑 Nueva";
+    if (phase > 0.03 && phase <= 0.22) moonPhaseText = "🌒 Creciente";
+    else if (phase > 0.22 && phase <= 0.28) moonPhaseText = "🌓 Cuarto Creciente";
+    else if (phase > 0.28 && phase <= 0.47) moonPhaseText = "🌔 Gibosa Creciente";
+    else if (phase > 0.47 && phase <= 0.53) moonPhaseText = "🌕 Llena";
+    else if (phase > 0.53 && phase <= 0.72) moonPhaseText = "🌖 Gibosa Menguante";
+    else if (phase > 0.72 && phase <= 0.78) moonPhaseText = "🌗 Cuarto Menguante";
+    else if (phase > 0.78 && phase <= 0.97) moonPhaseText = "🌘 Menguante";
 
-  // Constelaciones visibles
-  let skyDesc = "";
-  if (month >= 11 || month <= 2) {
-    skyDesc = "✨ <strong>Destacan:</strong> Orión (Las Tres Marías), Tauro, Las Pléyades. <strong>Visibles:</strong> Júpiter y Sirio al zénit.";
-  } else if (month >= 3 && month <= 5) {
-    skyDesc = "✨ <strong>Destacan:</strong> La Cruz del Sur alta, Centauro, Leo. <strong>Visibles:</strong> Marte al anochecer.";
-  } else if (month >= 6 && month <= 8) {
-    skyDesc = "✨ <strong>Destacan:</strong> Escorpio en lo alto, Sagitario, Centro Galáctico. <strong>Visibles:</strong> Saturno radiante.";
-  } else {
-    skyDesc = "✨ <strong>Destacan:</strong> Pegaso, Acuario, La Cruz del Sur descendiendo. <strong>Visibles:</strong> Venus al crepúsculo.";
+    if (moonEl) moonEl.textContent = moonPhaseText;
+
+    // Constelaciones visibles según época del año
+    let skyDesc = "";
+    if (month >= 11 || month <= 2) {
+      skyDesc = "✨ <strong>Destacan:</strong> Orión (Las Tres Marías), Tauro, Las Pléyades. <strong>Visibles:</strong> Júpiter y Sirio al zénit.";
+    } else if (month >= 3 && month <= 5) {
+      skyDesc = "✨ <strong>Destacan:</strong> La Cruz del Sur alta, Centauro, Leo. <strong>Visibles:</strong> Marte al anochecer.";
+    } else if (month >= 6 && month <= 8) {
+      skyDesc = "✨ <strong>Destacan:</strong> Escorpio en lo alto, Sagitario, Centro Galáctico. <strong>Visibles:</strong> Saturno radiante.";
+    } else {
+      skyDesc = "✨ <strong>Destacan:</strong> Pegaso, Acuario, La Cruz del Sur descendiendo. <strong>Visibles:</strong> Venus al crepúsculo.";
+    }
+
+    if (constEl) constEl.innerHTML = skyDesc;
+  } catch (e) {
+    console.error("Error en cálculos astronómicos:", e);
   }
-
-  document.getElementById("astro-constellations").innerHTML = skyDesc;
 }
 
 function formatHour(decimalHours) {
@@ -86,36 +101,71 @@ function formatHour(decimalHours) {
   return `${hrs < 10 ? '0' : ''}${hrs}:${mins < 10 ? '0' : ''}${mins} hs`;
 }
 
-// 3. Noticias de Infobae
+// 3. Noticias de Infobae con Proxy Alternativo y Respaldo
 async function fetchInfobaeNews() {
   const container = document.getElementById("news-container");
+  if (!container) return;
+
   const rssUrl = "https://www.infobae.com/arc/outboundfeeds/rss/";
+  
+  // Usamos un conector confiable para transformar el RSS a JSON
+  const apiUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(rssUrl)}`;
 
   try {
-    const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`);
+    const res = await fetch(apiUrl);
     const data = await res.json();
+    
+    if (data.contents) {
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(data.contents, "text/xml");
+      const items = xmlDoc.querySelectorAll("item");
 
-    if (data.items && data.items.length > 0) {
-      container.innerHTML = data.items.slice(0, 7).map(item => `
-        <div class="news-item">
-          <a href="${item.link}" target="_blank">&bull; ${item.title}</a>
-          <div style="font-size: 11px; color: #666; margin-top: 4px;">Publicado: ${new Date(item.pubDate).toLocaleString("es-AR")}</div>
-        </div>
-      `).join('');
-    } else {
-      container.innerHTML = `<p style="color:red;">No se pudieron obtener las noticias en este momento.</p>`;
+      if (items.length > 0) {
+        let html = "";
+        let count = 0;
+        items.forEach(item => {
+          if (count < 7) {
+            const title = item.querySelector("title")?.textContent || "Sin título";
+            const link = item.querySelector("link")?.textContent || "https://www.infobae.com";
+            const pubDate = item.querySelector("pubDate")?.textContent || "";
+            
+            html += `
+              <div class="news-item">
+                <a href="${link}" target="_blank">&bull; ${title}</a>
+                <div style="font-size: 11px; color: #666; margin-top: 4px;">Publicado: ${pubDate ? new Date(pubDate).toLocaleString("es-AR") : "Reciente"}</div>
+              </div>
+            `;
+            count++;
+          }
+        });
+        container.innerHTML = html;
+        return;
+      }
     }
+    throw new Error("No se pudieron parsear los elementos.");
   } catch (err) {
-    container.innerHTML = `<p style="color:red;">Error de conexión con el feed de noticias.</p>`;
+    console.warn("Fallo en la carga del feed directo, usando portal de respaldo:", err);
+    // Respaldo visual elegante si la API externa falla o bloquea la red
+    container.innerHTML = `
+      <div class="news-item">
+        <a href="https://www.infobae.com" target="_blank">&bull; Acceso directo a las Noticias de Infobae en Vivo</a>
+        <div style="font-size: 11px; color: #666; margin-top: 4px;">Consulta la portada principal de Infobae.</div>
+      </div>
+      <div class="news-item">
+        <a href="https://www.diariodecuyo.com.ar" target="_blank">&bull; Diario de Cuyo — Noticias de San Juan</a>
+        <div style="font-size: 11px; color: #666; margin-top: 4px;">Edición digital San Juan.</div>
+      </div>
+    `;
   }
 }
 
-// 4. Frase / Sentencia del Día (Garantizada en Español)
-async function fetchDailyQuote() {
+// 4. Frase / Sentencia del Día Garantizada
+function fetchDailyQuote() {
   const quoteEl = document.getElementById("quote");
   const authorEl = document.getElementById("quote-author");
 
-  // Colección de sentencias filosóficas y espirituales en español
+  if (!quoteEl || !authorEl) return;
+
   const spanishQuotes = [
     { quote: "No es que tengamos poco tiempo, sino que perdemos mucho.", author: "Séneca" },
     { quote: "El sabio no dice todo lo que piensa, pero siempre piensa todo lo que dice.", author: "Aristóteles" },
@@ -125,17 +175,11 @@ async function fetchDailyQuote() {
     { quote: "Caminante, no hay camino, se hace camino al andar.", author: "Antonio Machado" }
   ];
 
-  try {
-    // Selecciona una cita del repertorio según el día del año para que cambie a diario
-    const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
-    const selected = spanishQuotes[dayOfYear % spanishQuotes.length];
-    
-    quoteEl.textContent = `"${selected.quote}"`;
-    authorEl.textContent = `— ${selected.author}`;
-  } catch (err) {
-    quoteEl.textContent = '"La fe por sí sola basta."';
-    authorEl.textContent = '— Santo Tomás de Aquino';
-  }
+  const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
+  const selected = spanishQuotes[dayOfYear % spanishQuotes.length];
+  
+  quoteEl.textContent = `"${selected.quote}"`;
+  authorEl.textContent = `— ${selected.author}`;
 }
 
 // 5. Envío del Libro de Visitas (Epi Stola Ex Corde)
@@ -158,10 +202,7 @@ function sendGuestMessage(event) {
 
   const mailtoUrl = `mailto:arielgomezz@gmail.com?subject=${subject}&body=${encodeURIComponent(bodyText)}`;
 
-  // Abrir cliente de correo
   window.location.href = mailtoUrl;
 
   alert("¡Gracias por tu mensaje! Se abrirá tu aplicación de correo para enviar la epístola.");
-} de Aquino';
-  }
 }
